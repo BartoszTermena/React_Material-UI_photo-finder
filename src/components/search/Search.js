@@ -14,14 +14,19 @@ class Search extends Component {
         images: []
     }
     handleSearchText = (e) => {
+        const val = e.target.value;
         this.setState({
-            [e.target.name] : e.target.value
+            [e.target.name] : val
         }, () => {
-            axios.get(`${this.state.apiUrl}/?key=${this.state.apiKey}&q=${this.state.searchText}&image_type=photo&per_page=${this.state.amount}&safesearch=true`)
+            if(val === '') {
+                this.setState({images: []})
+            } else {
+                axios.get(`${this.state.apiUrl}/?key=${this.state.apiKey}&q=${this.state.searchText}&image_type=photo&per_page=${this.state.amount}&safesearch=true`)
                 .then(res => this.setState({
                     images: res.data.hits
                 }))
                 .catch(err => console.log(err));
+            }
         });
     };
     handleSearchAmount = (e, index, value) => {
